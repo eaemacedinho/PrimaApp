@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrimaApp – Super App Local</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --verde: #1DB954;
+  --verde-dark: #148a3d;
+  --verde-light: #e8faf0;
+  --laranja: #FF6B2B;
+  --laranja-light: #fff3ee;
+  --amarelo: #FFD93D;
+  --roxo: #7C3AED;
+  --bg: #F7F8FA;
+  --white: #ffffff;
+  --text: #1a1a2e;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.13);
+  --radius: 20px;
+  --radius-sm: 12px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: #e8eaf0;
+  min-height: 100vh;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px;
+}
+
+h1.page-title {
+  font-family: 'Baloo 2', cursive;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text);
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+h1.page-title span { color: var(--verde); }
+.subtitle {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* PHONE SHELL */
+.phone {
+  width: 375px;
+  background: var(--bg);
+  border-radius: 44px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.22), 0 0 0 10px #1a1a2e, 0 0 0 12px #333;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+.phone-notch {
+  background: #1a1a2e;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.phone-notch .notch-inner {
+  width: 120px;
+  height: 22px;
+  background: #000;
+  border-radius: 0 0 16px 16px;
+}
+.screen { overflow: hidden; }
+
+/* STATUS BAR */
+.status-bar {
+  background: var(--white);
+  padding: 6px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* ============ SCREEN 1 – HOME ============ */
+.s1-header {
+  background: linear-gradient(135deg, #1DB954 0%, #0e8f3c 100%);
+  padding: 20px 20px 28px;
+  position: relative;
+  overflow: hidden;
+}
+.s1-header::before {
+  content: '';
+  position: absolute;
+  right: -30px; top: -30px;
+  width: 180px; height: 180px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+}
+.s1-header::after {
+  content: '';
+  position: absolute;
+  right: 30px; top: 40px;
+  width: 100px; height: 100px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 50%;
+}
+.s1-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  position: relative; z-index: 1;
+}
+.app-logo {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+.app-logo span { color: var(--amarelo); }
+.notif-btn {
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.notif-dot {
+  width: 8px; height: 8px;
+  background: var(--laranja);
+  border-radius: 50%;
+  position: absolute; top: 6px; right: 6px;
+  border: 2px solid transparent;
+}
+.greeting {
+  color: rgba(255,255,255,0.85);
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+  position: relative; z-index: 1;
+}
+.greeting strong { color: #fff; font-size: 1.05rem; }
+.location-row {
+  display: flex; align-items: center; gap: 4px;
+  color: rgba(255,255,255,0.75);
+  font-size: 0.78rem;
+  position: relative; z-index: 1;
+}
+.location-row svg { opacity: 0.9; }
+
+/* Search */
+.search-bar {
+  background: var(--white);
+  border-radius: 50px;
+  padding: 11px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 20px -24px;
+  position: relative; z-index: 2;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+}
+.search-bar input {
+  border: none; outline: none;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  background: transparent;
+  flex: 1;
+}
+
+/* Quick Actions */
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 36px 20px 16px;
+}
+.qa-item {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 6px;
+  cursor: pointer;
+}
+.qa-icon {
+  width: 52px; height: 52px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+.qa-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text);
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Banner */
+.banner-section { padding: 0 20px 16px; }
+.banner {
+  background: linear-gradient(120deg, #FF6B2B, #ff9a5e);
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+.banner::after {
+  content: '🎉';
+  position: absolute;
+  right: 60px; top: -8px;
+  font-size: 2.5rem;
+  opacity: 0.3;
+}
+.banner-text h3 {
+  color: #fff;
+  font-family: 'Baloo 2', cursive;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.banner-text p { color: rgba(255,255,255,0.88); font-size: 0.75rem; margin-top: 2px; }
+.banner-btn {
+  background: #fff;
+  color: var(--laranja);
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 8px 14px;
+  border-radius: 50px;
+  white-space: nowrap;
+  font-family: 'Nunito', sans-serif;
+}
+
+/* Section title */
+.sec-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 4px 20px 12px;
+}
+.sec-title {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.sec-link { color: var(--verde); font-size: 0.78rem; font-weight: 700; }
+
+/* Categories scroll */
+.cats-scroll {
+  display: flex; gap: 10px;
+  padding: 0 20px 16px;
+  overflow-x: auto;
+}
+.cats-scroll::-webkit-scrollbar { display: none; }
+.cat-pill {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--white);
+  border-radius: 50px;
+  padding: 8px 14px;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+.cat-pill.active { border-color: var(--verde); color: var(--verde); background: var(--verde-light); }
+
+/* Store cards scroll */
+.stores-scroll {
+  display: flex; gap: 14px;
+  padding: 0 20px 20px;
+  overflow-x: auto;
+}
+.stores-scroll::-webkit-scrollbar { display: none; }
+.store-card {
+  background: var(--white);
+  border-radius: 18px;
+  overflow: hidden;
+  min-width: 150px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  flex-shrink: 0;
+}
+.store-img {
+  height: 90px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem;
+}
+.store-info { padding: 10px; }
+.store-name { font-weight: 800; font-size: 0.82rem; color: var(--text); }
+.store-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+.store-rating { color: var(--amarelo); font-size: 0.72rem; font-weight: 700; }
+.store-time { color: var(--text-muted); font-size: 0.7rem; }
+.store-badge {
+  display: inline-block;
+  background: var(--verde-light);
+  color: var(--verde-dark);
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 50px;
+  margin-top: 5px;
+}
+
+/* Bottom Nav */
+.bottom-nav {
+  background: var(--white);
+  display: flex;
+  padding: 10px 10px 16px;
+  border-top: 1px solid var(--border);
+}
+.nav-item {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; gap: 3px;
+  cursor: pointer;
+}
+.nav-icon { font-size: 1.2rem; }
+.nav-label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); }
+.nav-item.active .nav-label { color: var(--verde); }
+.nav-item.active .nav-icon { filter: none; }
+.nav-active-dot {
+  width: 4px; height: 4px;
+  background: var(--verde);
+  border-radius: 50%;
+  margin-top: -2px;
+}
+
+
+/* ============ SCREEN 2 – RESTAURANTE ============ */
+.s2-hero {
+  position: relative;
+  height: 180px;
+  background: linear-gradient(135deg, #ff9a5e, #FF6B2B);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 5rem;
+  overflow: hidden;
+}
+.s2-hero::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 40px;
+  background: var(--bg);
+  border-radius: 24px 24px 0 0;
+}
+.back-btn {
+  position: absolute; top: 16px; left: 16px;
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.85);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  z-index: 2;
+}
+.fav-btn {
+  position: absolute; top: 16px; right: 16px;
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.85);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  z-index: 2;
+}
+.s2-info { padding: 0 20px 16px; }
+.s2-name {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text);
+}
+.s2-tags {
+  display: flex; gap: 8px; margin: 6px 0 10px;
+}
+.tag {
+  background: var(--bg);
+  border-radius: 50px;
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.s2-stats {
+  display: flex; gap: 16px;
+}
+.stat { display: flex; align-items: center; gap: 4px; font-size: 0.78rem; color: var(--text-muted); font-weight: 600; }
+.stat strong { color: var(--text); }
+
+.delivery-banner {
+  margin: 0 20px 16px;
+  background: var(--verde-light);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.delivery-badge {
+  background: var(--verde);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 50px;
+}
+.delivery-text { font-size: 0.78rem; font-weight: 600; color: var(--verde-dark); }
+
+.menu-section { padding: 0 20px; }
+.menu-cat {
+  font-family: 'Baloo 2', cursive;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.menu-item {
+  display: flex;
+  background: var(--white);
+  border-radius: 14px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.menu-item-info { padding: 12px; flex: 1; }
+.menu-item-name { font-weight: 800; font-size: 0.85rem; color: var(--text); }
+.menu-item-desc { color: var(--text-muted); font-size: 0.73rem; margin: 3px 0 8px; line-height: 1.4; }
+.menu-item-price { font-weight: 800; font-size: 0.9rem; color: var(--verde-dark); }
+.menu-item-img {
+  width: 88px;
+  background: linear-gradient(135deg, #ffecd2, #fcb69f);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.2rem;
+  flex-shrink: 0;
+}
+.add-btn {
+  width: 28px; height: 28px;
+  background: var(--verde);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+/* Cart bar */
+.cart-bar {
+  margin: 14px 20px;
+  background: linear-gradient(90deg, #1DB954, #148a3d);
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 4px 20px rgba(29,185,84,0.35);
+}
+.cart-info { color: #fff; }
+.cart-info strong { font-family: 'Baloo 2', cursive; font-size: 0.95rem; font-weight: 700; }
+.cart-info p { font-size: 0.75rem; opacity: 0.85; }
+.cart-action {
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.82rem;
+  display: flex; align-items: center; gap: 4px;
+}
+
+
+/* ============ SCREEN 3 – FIDELIDADE/CASHBACK ============ */
+.s3-header {
+  background: linear-gradient(135deg, #7C3AED 0%, #4C1D95 100%);
+  padding: 24px 20px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.s3-header::before {
+  content: '';
+  position: absolute;
+  right: -40px; bottom: -40px;
+  width: 200px; height: 200px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 50%;
+}
+.s3-title {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.s3-sub { color: rgba(255,255,255,0.75); font-size: 0.8rem; }
+
+/* Cashback card */
+.cashback-card {
+  background: rgba(255,255,255,0.15);
+  border-radius: 20px;
+  padding: 16px;
+  margin-top: 16px;
+  border: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+}
+.cashback-amount {
+  font-family: 'Baloo 2', cursive;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+.cashback-label { color: rgba(255,255,255,0.75); font-size: 0.78rem; margin-top: 2px; }
+.cashback-prog-bg {
+  background: rgba(255,255,255,0.2);
+  border-radius: 50px;
+  height: 8px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+.cashback-prog {
+  height: 100%;
+  background: var(--amarelo);
+  border-radius: 50px;
+  width: 62%;
+}
+.cashback-row {
+  display: flex; justify-content: space-between;
+  color: rgba(255,255,255,0.75);
+  font-size: 0.72rem;
+  margin-top: 6px;
+}
+
+/* Level badges */
+.levels-section { padding: 20px; margin-top: -16px; }
+.levels-row { display: flex; gap: 10px; margin-bottom: 16px; }
+.level-badge {
+  flex: 1;
+  border-radius: 16px;
+  padding: 14px 10px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.level-badge.bronze { background: linear-gradient(135deg, #cd7f32, #a0522d); }
+.level-badge.silver { background: linear-gradient(135deg, #c0c0c0, #808080); }
+.level-badge.gold { background: linear-gradient(135deg, #FFD93D, #f59e0b); }
+.level-badge .level-ico { font-size: 1.6rem; }
+.level-badge .level-name { color: #fff; font-weight: 800; font-size: 0.72rem; margin-top: 4px; }
+.level-badge.active-level { transform: scale(1.06); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+.level-badge .level-check { font-size: 0.65rem; color: rgba(255,255,255,0.9); margin-top: 2px; }
+
+/* Transaction list */
+.trans-title {
+  font-family: 'Baloo 2', cursive;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+.trans-item {
+  display: flex; align-items: center;
+  background: var(--white);
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.trans-icon {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+.trans-text { flex: 1; }
+.trans-name { font-weight: 700; font-size: 0.82rem; color: var(--text); }
+.trans-date { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
+.trans-val { font-weight: 800; font-size: 0.88rem; }
+.trans-val.pos { color: var(--verde); }
+.trans-val.neg { color: var(--laranja); }
+
+
+/* ============ SCREEN 4 – EVENTOS/NOTÍCIAS ============ */
+.s4-header {
+  background: var(--white);
+  padding: 16px 20px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.s4-logo {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text);
+}
+.s4-logo span { color: var(--verde); }
+
+.tabs-row {
+  display: flex;
+  border-bottom: 2px solid var(--border);
+  background: var(--white);
+}
+.tab {
+  flex: 1; text-align: center;
+  padding: 12px 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  position: relative;
+}
+.tab.active { color: var(--verde); }
+.tab.active::after {
+  content: '';
+  position: absolute; bottom: -2px; left: 10%; right: 10%;
+  height: 2px;
+  background: var(--verde);
+  border-radius: 2px;
+}
+
+.news-feed { padding: 16px 20px; }
+.news-big {
+  background: var(--white);
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+.news-big-img {
+  height: 140px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3rem;
+  position: relative;
+}
+.news-cat-tag {
+  position: absolute; top: 12px; left: 12px;
+  background: var(--verde);
+  color: #fff;
+  font-size: 0.67rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 50px;
+}
+.news-big-body { padding: 14px; }
+.news-big-title { font-weight: 800; font-size: 0.9rem; color: var(--text); line-height: 1.3; }
+.news-meta { display: flex; gap: 10px; margin-top: 6px; color: var(--text-muted); font-size: 0.7rem; }
+
+.news-small {
+  display: flex; gap: 12px;
+  background: var(--white);
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.news-small-img {
+  width: 70px; height: 70px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f093fb, #f5576c);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+.news-small-body { flex: 1; }
+.news-small-title { font-weight: 700; font-size: 0.82rem; color: var(--text); line-height: 1.3; }
+.news-small-meta { color: var(--text-muted); font-size: 0.7rem; margin-top: 4px; }
+
+.event-card {
+  background: var(--white);
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  display: flex;
+}
+.event-date-col {
+  width: 60px;
+  background: linear-gradient(135deg, #FF6B2B, #ff9a5e);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 12px 8px;
+}
+.event-day { font-family: 'Baloo 2', cursive; font-size: 1.6rem; font-weight: 800; color: #fff; line-height: 1; }
+.event-month { font-size: 0.65rem; font-weight: 700; color: rgba(255,255,255,0.85); text-transform: uppercase; }
+.event-info { padding: 14px; flex: 1; }
+.event-name { font-weight: 800; font-size: 0.88rem; color: var(--text); }
+.event-loc { color: var(--text-muted); font-size: 0.73rem; margin-top: 3px; display: flex; align-items: center; gap: 4px; }
+.event-tag {
+  display: inline-block;
+  background: var(--laranja-light);
+  color: var(--laranja);
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 50px;
+  margin-top: 6px;
+}
+
+
+/* LAYOUT SECTION TITLES */
+.screen-label {
+  font-family: 'Baloo 2', cursive;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.screens-row {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.screen-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* BRAND SECTION */
+.brand-section {
+  text-align: center;
+  padding: 20px;
+}
+.brand-name {
+  font-family: 'Baloo 2', cursive;
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -1px;
+}
+.brand-name span { color: var(--verde); }
+.brand-tagline {
+  color: var(--text-muted);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 4px;
+}
+.brand-chips {
+  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 14px;
+}
+.brand-chip {
+  background: var(--white);
+  border-radius: 50px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.brand-chip .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+</style>
+</head>
+<body>
+
+<!-- BRAND -->
+<div class="brand-section">
+  <div class="brand-name">Prima<span>App</span></div>
+  <div class="brand-tagline">O super app da sua cidade 🏙️</div>
+  <div class="brand-chips">
+    <div class="brand-chip"><span class="dot" style="background:#1DB954"></span>Delivery Local</div>
+    <div class="brand-chip"><span class="dot" style="background:#FF6B2B"></span>Cashback</div>
+    <div class="brand-chip"><span class="dot" style="background:#7C3AED"></span>Eventos & Notícias</div>
+    <div class="brand-chip"><span class="dot" style="background:#FFD93D"></span>Serviços</div>
+  </div>
+</div>
+
+<!-- SCREENS ROW -->
+<div class="screens-row">
+
+  <!-- SCREEN 1: HOME -->
+  <div class="screen-wrapper">
+    <div class="screen-label">Tela Inicial</div>
+    <div class="phone">
+      <div class="phone-notch"><div class="notch-inner"></div></div>
+      <div class="screen">
+        <div class="status-bar">
+          <span>9:41</span>
+          <span>📶 🔋</span>
+        </div>
+        
+        <div class="s1-header">
+          <div class="s1-top">
+            <div class="app-logo">Prima<span>App</span></div>
+            <div class="notif-btn">
+              <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              <div class="notif-dot"></div>
+            </div>
+          </div>
+          <div class="greeting">Boa tarde, <strong>Ana Claudia! 👋</strong></div>
+          <div class="location-row">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Araguari, MG
+          </div>
+        </div>
+
+        <div class="search-bar">
+          <svg width="16" height="16" fill="none" stroke="#9ca3af" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" placeholder="Buscar comércios, serviços..." readonly>
+          <svg width="16" height="16" fill="none" stroke="#9ca3af" stroke-width="2" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <div class="qa-item">
+            <div class="qa-icon" style="background:linear-gradient(135deg,#fff8e1,#ffd54f)">🍔</div>
+            <div class="qa-label">Delivery</div>
+          </div>
+          <div class="qa-item">
+            <div class="qa-icon" style="background:linear-gradient(135deg,#e8f5e9,#a5d6a7)">✂️</div>
+            <div class="qa-label">Serviços</div>
+          </div>
+          <div class="qa-item">
+            <div class="qa-icon" style="background:linear-gradient(135deg,#e3f2fd,#90caf9)">🛒</div>
+            <div class="qa-label">Mercado</div>
+          </div>
+          <div class="qa-item">
+            <div class="qa-icon" style="background:linear-gradient(135deg,#fce4ec,#f48fb1)">🎉</div>
+            <div class="qa-label">Eventos</div>
+          </div>
+        </div>
+
+        <!-- Banner -->
+        <div class="banner-section">
+          <div class="banner">
+            <div class="banner-text">
+              <h3>Frete grátis hoje!</h3>
+              <p>Para pedidos acima de R$ 40</p>
+            </div>
+            <div class="banner-btn">Pedir agora</div>
+          </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="sec-row">
+          <div class="sec-title">Categorias</div>
+        </div>
+        <div class="cats-scroll">
+          <div class="cat-pill active">🍕 Todos</div>
+          <div class="cat-pill">🍔 Lanches</div>
+          <div class="cat-pill">🍣 Japonês</div>
+          <div class="cat-pill">🍗 Frango</div>
+          <div class="cat-pill">🥗 Saudável</div>
+        </div>
+
+        <!-- Stores -->
+        <div class="sec-row">
+          <div class="sec-title">Perto de você</div>
+          <div class="sec-link">Ver todos</div>
+        </div>
+        <div class="stores-scroll">
+          <div class="store-card">
+            <div class="store-img" style="background:linear-gradient(135deg,#ffe0b2,#ff8f00)">🍔</div>
+            <div class="store-info">
+              <div class="store-name">Burguer do Zé</div>
+              <div class="store-meta">
+                <span class="store-rating">⭐ 4.8</span>
+                <span class="store-time">• 25 min</span>
+              </div>
+              <div class="store-badge">Frete Grátis</div>
+            </div>
+          </div>
+          <div class="store-card">
+            <div class="store-img" style="background:linear-gradient(135deg,#e8f5e9,#43a047)">🥗</div>
+            <div class="store-info">
+              <div class="store-name">Sabor Natural</div>
+              <div class="store-meta">
+                <span class="store-rating">⭐ 4.6</span>
+                <span class="store-time">• 30 min</span>
+              </div>
+              <div class="store-badge">-10% hoje</div>
+            </div>
+          </div>
+          <div class="store-card">
+            <div class="store-img" style="background:linear-gradient(135deg,#fce4ec,#d81b60)">🍕</div>
+            <div class="store-info">
+              <div class="store-name">Pizzaria Prima</div>
+              <div class="store-meta">
+                <span class="store-rating">⭐ 4.9</span>
+                <span class="store-time">• 40 min</span>
+              </div>
+              <div class="store-badge">Popular</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Nav -->
+        <div class="bottom-nav">
+          <div class="nav-item active">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label" style="color:var(--verde)">Início</div>
+            <div class="nav-active-dot"></div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">🔍</div>
+            <div class="nav-label">Explorar</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">📋</div>
+            <div class="nav-label">Pedidos</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">💰</div>
+            <div class="nav-label">Cashback</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">Perfil</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: RESTAURANTE -->
+  <div class="screen-wrapper">
+    <div class="screen-label">Tela do Comércio</div>
+    <div class="phone">
+      <div class="phone-notch"><div class="notch-inner"></div></div>
+      <div class="screen">
+        <div class="status-bar">
+          <span>9:41</span>
+          <span>📶 🔋</span>
+        </div>
+        <div class="s2-hero">
+          🍔
+          <div class="back-btn">←</div>
+          <div class="fav-btn">🤍</div>
+        </div>
+
+        <div class="s2-info">
+          <div class="s2-name">Burguer do Zé</div>
+          <div class="s2-tags">
+            <div class="tag">🍔 Lanches</div>
+            <div class="tag">🍟 Batata</div>
+            <div class="tag">🥤 Bebidas</div>
+          </div>
+          <div class="s2-stats">
+            <div class="stat"><strong>⭐ 4.8</strong> (312 avaliações)</div>
+            <div class="stat">• <strong>25-35</strong> min</div>
+          </div>
+        </div>
+
+        <div class="delivery-banner">
+          <div class="delivery-badge">🚚 Grátis</div>
+          <div class="delivery-text">Entrega grátis hoje! Pedido mín. R$ 25</div>
+        </div>
+
+        <div class="menu-section">
+          <div class="menu-cat">🔥 Mais Pedidos</div>
+          
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">Burguer Clássico</div>
+              <div class="menu-item-desc">Pão brioche, 180g blend, queijo cheddar, alface, tomate</div>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div class="menu-item-price">R$ 24,90</div>
+                <div class="add-btn">+</div>
+              </div>
+            </div>
+            <div class="menu-item-img">🍔</div>
+          </div>
+
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">Burguer Duplo</div>
+              <div class="menu-item-desc">Dois blends 150g, cheddar duplo, bacon crocante</div>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div class="menu-item-price">R$ 34,90</div>
+                <div class="add-btn">+</div>
+              </div>
+            </div>
+            <div class="menu-item-img">🥩</div>
+          </div>
+
+          <div class="menu-cat" style="margin-top:4px">🍟 Acompanhamentos</div>
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">Batata Frita G</div>
+              <div class="menu-item-desc">Batatas crocantes com tempero especial da casa</div>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div class="menu-item-price">R$ 14,90</div>
+                <div class="add-btn">+</div>
+              </div>
+            </div>
+            <div class="menu-item-img">🍟</div>
+          </div>
+        </div>
+
+        <div class="cart-bar">
+          <div class="cart-info">
+            <strong>🛒 2 itens no carrinho</strong>
+            <p>Total: R$ 59,80</p>
+          </div>
+          <div class="cart-action">Ver pedido →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: CASHBACK -->
+  <div class="screen-wrapper">
+    <div class="screen-label">Programa de Fidelidade</div>
+    <div class="phone">
+      <div class="phone-notch"><div class="notch-inner"></div></div>
+      <div class="screen">
+        <div class="status-bar">
+          <span>9:41</span>
+          <span>📶 🔋</span>
+        </div>
+
+        <div class="s3-header">
+          <div class="s3-title">Meu Cashback 💜</div>
+          <div class="s3-sub">Ganhe de volta em cada compra</div>
+          
+          <div class="cashback-card">
+            <div class="cashback-amount">R$ 37,80</div>
+            <div class="cashback-label">disponível para usar</div>
+            <div class="cashback-prog-bg">
+              <div class="cashback-prog"></div>
+            </div>
+            <div class="cashback-row">
+              <span>R$ 37,80 acumulado</span>
+              <span>Meta: R$ 60 → Gold</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="levels-section">
+          <div class="levels-row">
+            <div class="level-badge bronze">
+              <div class="level-ico">🥉</div>
+              <div class="level-name">Bronze</div>
+              <div class="level-check">5% back</div>
+            </div>
+            <div class="level-badge silver active-level">
+              <div class="level-ico">🥈</div>
+              <div class="level-name">Silver ✓</div>
+              <div class="level-check">8% back</div>
+            </div>
+            <div class="level-badge gold">
+              <div class="level-ico">🥇</div>
+              <div class="level-name">Gold</div>
+              <div class="level-check">12% back</div>
+            </div>
+          </div>
+
+          <div class="trans-title">Histórico recente</div>
+
+          <div class="trans-item">
+            <div class="trans-icon" style="background:#e8faf0">🍔</div>
+            <div class="trans-text">
+              <div class="trans-name">Burguer do Zé</div>
+              <div class="trans-date">Hoje, 12:34</div>
+            </div>
+            <div class="trans-val pos">+R$ 4,80</div>
+          </div>
+
+          <div class="trans-item">
+            <div class="trans-icon" style="background:#fff3ee">🏪</div>
+            <div class="trans-text">
+              <div class="trans-name">Mercadinho São Paulo</div>
+              <div class="trans-date">Ontem, 18:20</div>
+            </div>
+            <div class="trans-val pos">+R$ 6,40</div>
+          </div>
+
+          <div class="trans-item">
+            <div class="trans-icon" style="background:#f3e8ff">✂️</div>
+            <div class="trans-text">
+              <div class="trans-name">Barbearia do Igor</div>
+              <div class="trans-date">22/02, 10:00</div>
+            </div>
+            <div class="trans-val pos">+R$ 3,60</div>
+          </div>
+
+          <div class="trans-item">
+            <div class="trans-icon" style="background:#fef3c7">🛍️</div>
+            <div class="trans-text">
+              <div class="trans-name">Resgate no Pizzaria Prima</div>
+              <div class="trans-date">20/02, 20:15</div>
+            </div>
+            <div class="trans-val neg">-R$ 15,00</div>
+          </div>
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">Início</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">🔍</div>
+            <div class="nav-label">Explorar</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">📋</div>
+            <div class="nav-label">Pedidos</div>
+          </div>
+          <div class="nav-item active">
+            <div class="nav-icon">💰</div>
+            <div class="nav-label" style="color:var(--verde)">Cashback</div>
+            <div class="nav-active-dot"></div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">Perfil</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: EVENTOS -->
+  <div class="screen-wrapper">
+    <div class="screen-label">Conteúdo Local</div>
+    <div class="phone">
+      <div class="phone-notch"><div class="notch-inner"></div></div>
+      <div class="screen">
+        <div class="status-bar">
+          <span>9:41</span>
+          <span>📶 🔋</span>
+        </div>
+
+        <div class="s4-header">
+          <div class="s4-logo">Prima<span>News</span></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <svg width="18" height="18" fill="none" stroke="#6b7280" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </div>
+        </div>
+
+        <div class="tabs-row">
+          <div class="tab active">📰 Notícias</div>
+          <div class="tab">🎉 Eventos</div>
+          <div class="tab">📢 Ofertas</div>
+        </div>
+
+        <div class="news-feed">
+          <div class="news-big">
+            <div class="news-big-img">
+              🏗️
+              <div class="news-cat-tag">Cidade</div>
+            </div>
+            <div class="news-big-body">
+              <div class="news-big-title">Novo parque será inaugurado no centro da cidade em março</div>
+              <div class="news-meta">
+                <span>📍 Araguari</span>
+                <span>• 2h atrás</span>
+                <span>• 147 leituras</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="news-small">
+            <div class="news-small-img" style="background:linear-gradient(135deg,#a8edea,#fed6e3)">🎵</div>
+            <div class="news-small-body">
+              <div class="news-small-title">Festival de música local confirma atrações para o mês</div>
+              <div class="news-small-meta">🎟️ Cultura • 5h atrás</div>
+            </div>
+          </div>
+
+          <div class="news-small">
+            <div class="news-small-img" style="background:linear-gradient(135deg,#ffeaa7,#fdcb6e)">🏪</div>
+            <div class="news-small-body">
+              <div class="news-small-title">Feira do produtor volta com nova área coberta no sábado</div>
+              <div class="news-small-meta">🛍️ Comércio • 8h atrás</div>
+            </div>
+          </div>
+
+          <div style="margin-top:4px">
+            <div class="sec-row" style="padding:0 0 10px">
+              <div class="sec-title">Próximos Eventos</div>
+              <div class="sec-link">Ver todos</div>
+            </div>
+            
+            <div class="event-card">
+              <div class="event-date-col">
+                <div class="event-day">08</div>
+                <div class="event-month">Mar</div>
+              </div>
+              <div class="event-info">
+                <div class="event-name">Festa das Rosas 2025</div>
+                <div class="event-loc">
+                  <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Praça Coronel Adolfo
+                </div>
+                <div class="event-tag">🌹 Tradição</div>
+              </div>
+            </div>
+
+            <div class="event-card">
+              <div class="event-date-col" style="background:linear-gradient(135deg,#7C3AED,#4C1D95)">
+                <div class="event-day">15</div>
+                <div class="event-month">Mar</div>
+              </div>
+              <div class="event-info">
+                <div class="event-name">Show Sertanejo – Praça Central</div>
+                <div class="event-loc">
+                  <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Praça Central
+                </div>
+                <div class="event-tag" style="background:#f3e8ff;color:#7C3AED">🎵 Música</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div style="text-align:center;color:#9ca3af;font-size:0.8rem;font-weight:600;padding-bottom:20px">
+  PrimaApp Mockup · Versão Conceitual · 2025
+</div>
+
+</body>
+</html>
